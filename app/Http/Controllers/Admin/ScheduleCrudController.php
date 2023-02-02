@@ -39,12 +39,35 @@ class ScheduleCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('school_year_id');
-        CRUD::column('teacher_id');
+        CRUD::addColumn([
+            "name" => "school_year_id",
+            "label" => "School Year",
+            "entity" => "SchoolYear",
+            "model" => "App\Models\SchoolYear",
+            "type" => "select",
+            "attribute" => "school_year_name"
+        ]);
         CRUD::column('classroom_id');
+        CRUD::addColumn([
+            "name" => "timetable_id",
+            "label" => "Timetable",
+            "entity" => "Timetable",
+            "model" => "App\Models\Timetable",
+            "type" => "select",
+            "attribute" => "subject"
+        ]);
+        
+        CRUD::column('teacher_id');
         CRUD::column('day_id');
-        CRUD::column('timetable_id');
-        CRUD::column('subject_lesson_id');
+        CRUD::addColumn([
+            "name" => "subject_lesson_id",
+            "label" => "Subject Lesson",
+            "entity" => "SubjectLesson",
+            "model" => "App\Models\SubjectLesson",
+            "type" => "select",
+            "attribute" => "subject_name"
+        ]);
+        CRUD::column('no_lesson');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -63,12 +86,30 @@ class ScheduleCrudController extends CrudController
     {
         CRUD::setValidation(ScheduleRequest::class);
 
-        CRUD::field('school_year_id');
-        CRUD::field('teacher_id');
+        CRUD::addField([
+            'type' => 'select',
+            'name' => 'school_year_id', // the relationship name in your Migration
+            'entity' => 'Schoolyear', // the relationship name in your Model
+            'attribute' => 'school_year_name',
+        ]);
         CRUD::field('classroom_id');
+        CRUD::addField([
+            'type' => 'select',
+            'name' => 'timetable_id', // the relationship name in your Migration
+            'entity' => 'Timetable', // the relationship name in your Model
+            'attribute' => 'subject',
+        ]);
+        
+        CRUD::field('teacher_id');
         CRUD::field('day_id');
-        CRUD::field('timetable_id');
         CRUD::field('subject_lesson_id');
+        CRUD::addField([
+            'type' => 'select',
+            'name' => 'subject_lesson_id', // the relationship name in your Migration
+            'entity' => 'SubjectLesson', // the relationship name in your Model
+            'attribute' => 'subject_name',
+        ]);
+        CRUD::field('no_lesson');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

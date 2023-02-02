@@ -11,6 +11,7 @@ class Day extends Model
     use HasFactory;
 
     protected $fillable = [
-        'day_name'
+        'day_name',
+        'another_name',
     ];
 }

@@ -11,6 +11,7 @@ class Timetable extends Model
     use HasFactory;
     
     protected $fillable = [
+        'subject',
         'start',
         'end',
         'description'

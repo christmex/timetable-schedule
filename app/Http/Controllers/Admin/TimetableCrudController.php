@@ -39,6 +39,7 @@ class TimetableCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::column('subject');
         CRUD::column('start');
         CRUD::column('end');
         CRUD::column('description');
@@ -60,6 +61,7 @@ class TimetableCrudController extends CrudController
     {
         CRUD::setValidation(TimetableRequest::class);
 
+        CRUD::field('subject');
         CRUD::field('start');
         CRUD::field('end');
         CRUD::field('description');
