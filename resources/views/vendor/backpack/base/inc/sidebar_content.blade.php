@@ -9,3 +9,10 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('timetable') }}"><i class="nav-icon la la-question"></i> Timetables</a></li>
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('schedule') }}"><i class="nav-icon la la-question"></i> Schedules</a></li>
+
+<li class="nav-item nav-dropdown">
+    <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-user-cog"></i> Settings</a>
+    <ul class="nav-dropdown-items">
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('user') }}"><i class="nav-icon la la-th-list"></i> Users</a></li>
+    </ul>
+</li>
