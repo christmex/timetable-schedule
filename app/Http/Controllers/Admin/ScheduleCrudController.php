@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -227,13 +228,16 @@ class ScheduleCrudController extends CrudController
             $getNoLesson = json_decode($this->crud->getRequest()->request->get('no_lesson'), true);
 
             $getAllDataForCheck = $this->crud->model->all();
-
+            
             $query = [];
             for ($i=0; $i < count($getClassroom); $i++) {
                 for ($k=0; $k < count($getDay); $k++) { 
                     for ($l=0; $l < count($getTimetable); $l++) {
-                    $checkfirst = $getAllDataForCheck->where('school_year_id', $this->crud->getRequest()->request->get('school_year_id'))->where('classroom_id',$getClassroom[$i])->where('timetable_id',$getTimetable[$l]);
-                    
+                    $checkfirst = $getAllDataForCheck
+                    ->where('school_year_id', $this->crud->getRequest()->request->get('school_year_id'))
+                    ->where('classroom_id',$getClassroom[$i])
+                    ->where('day_id',$getDay[$i])
+                    ->where('timetable_id',$getTimetable[$l]);
                         if(!count($checkfirst)){
                             $query[] = [
                                 "school_year_id" => $this->crud->getRequest()->request->get('school_year_id'),
@@ -246,6 +250,12 @@ class ScheduleCrudController extends CrudController
                                 "created_at" => Carbon::now(),
                                 "updated_at" => Carbon::now(),
                             ];
+                        }else {
+
+                            Alert::error("The class at ".$checkfirst->first()->Timetable->subject." on ".$checkfirst->first()->Day->day_name." in ".$checkfirst->first()->Classroom->classname." Classroom already exists")->flash();
+                            return redirect()->back()->withInput();
+
+                            
                         }
                     }
                 }

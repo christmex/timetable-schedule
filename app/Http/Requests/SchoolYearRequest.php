@@ -25,7 +25,7 @@ class SchoolYearRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'school_year_name' => 'required|unique:school_years'
         ];
     }
 

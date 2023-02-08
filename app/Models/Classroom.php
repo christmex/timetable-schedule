@@ -13,4 +13,11 @@ class Classroom extends Model
     protected $fillable = [
         'classname'
     ];
+
+    public function Schedules()
+    {
+        return $this->hasMany(Schedule::class)->where('no_lesson',0)
+        ->whereNull('teacher_id')
+        ->whereNull('subject_lesson_id');
+    }
 }

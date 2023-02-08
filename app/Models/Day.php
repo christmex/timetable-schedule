@@ -14,4 +14,15 @@ class Day extends Model
         'day_name',
         'another_name',
     ];
+
+    /**
+     * Get the post that owns the comment.
+     */
+    public function Schedules()
+    {
+        return $this->hasMany(Schedule::class)->where('no_lesson',0)
+        ->whereNull('teacher_id')
+        ->whereNull('subject_lesson_id');
+    }
+    
 }
