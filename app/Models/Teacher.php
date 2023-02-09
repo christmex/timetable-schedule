@@ -13,4 +13,10 @@ class Teacher extends Model
     protected $fillable = [
         'teacher_name'
     ];
+
+    public function Schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
 }

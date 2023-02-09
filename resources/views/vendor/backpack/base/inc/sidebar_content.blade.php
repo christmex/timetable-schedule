@@ -8,7 +8,7 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('school-year') }}"><i class="nav-icon la la-graduation-cap"></i> School years</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('timetable') }}"><i class="nav-icon la la-clock"></i> Timetables</a></li>
 
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('schedule') }}"><i class="nav-icon la la-calendar-check"></i> Schedules</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('schedule') }}"><i class="nav-icon la la-calendar"></i> Schedules</a></li>
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('teacher-schedule') }}"><i class="nav-icon la la-calendar-check"></i> Teacher Schedule <span class="badge badge-primary"></span></a></li>
 
