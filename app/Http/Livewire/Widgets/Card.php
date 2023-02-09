@@ -47,6 +47,7 @@ class Card extends Component
             $this->dispatchBrowserEvent('alert_dispatch', ['text' => 'Success find idle teacher there is '.$resultFindIdleTeacher->count().' idle teacher at that time',"type" => 'success']);
         }else {
             $this->dispatchBrowserEvent('alert_dispatch', ['text' => 'Please fill out the form',"type" => 'warning']);
+            $this->resultFindIdleTeacher = null;
         }
 
     }
