@@ -10,7 +10,7 @@
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('schedule') }}"><i class="nav-icon la la-calendar-check"></i> Schedules</a></li>
 
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('teacher-schedule') }}"><i class="nav-icon la la-calendar-check"></i> Teacher Schedule</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('teacher-schedule') }}"><i class="nav-icon la la-calendar-check"></i> Teacher Schedule <span class="badge badge-primary"></span></a></li>
 
 <li class="nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-user-cog"></i> Settings</a>
