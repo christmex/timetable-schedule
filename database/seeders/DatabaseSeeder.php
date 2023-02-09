@@ -313,15 +313,15 @@ class DatabaseSeeder extends Seeder
 
         // last work masukkan semua break dan lunch time agar waktu yg available kelihatan
         // Kendalanya di bagian breaktime yang tiap kelas bisa beda dan jadwal guru semua peraturan ada di kertas
-        \App\Models\Schedule::create([
-            'school_year_id' => 1,
-            'classroom_id' => 1,
-            'timetable_id' => 4,
-            'teacher_id' => 1,
-            'day_id' => 1,
-            'subject_lesson_id' => 1,
-            'no_lesson' => 0,
-        ]);
+        // \App\Models\Schedule::create([
+        //     'school_year_id' => 1,
+        //     'classroom_id' => 1,
+        //     'timetable_id' => 4,
+        //     'teacher_id' => 1,
+        //     'day_id' => 1,
+        //     'subject_lesson_id' => 1,
+        //     'no_lesson' => 0,
+        // ]);
 
 
 

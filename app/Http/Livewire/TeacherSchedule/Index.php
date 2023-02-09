@@ -74,39 +74,43 @@ class Index extends Component
         if($validate) {
 
             // Pilih semua data dari tabel schedule berdasarkan school_year_id dan classroom_id
-            $querySchedule = Schedule::with('Classroom','Teacher','SubjectLesson')
-            ->where('school_year_id', $this->form_school_year_id)
-            ->whereIn('classroom_id', $this->form_classroom_id)
-            ->get();
+            // $querySchedule = Schedule::with('Classroom','Teacher','SubjectLesson')
+            // ->where('school_year_id', $this->form_school_year_id)
+            // ->whereIn('classroom_id', $this->form_classroom_id)
+            // ->get();
 
             // Cek jika mata pelajaran yang dipilih sudah terdapat guru yang mengajar di kelas itu
-            $check_subject_lesson = $querySchedule
-            ->where('subject_lesson_id',$this->form_subject_lesson_id);
+            $check_subject_lesson = Schedule::with('Classroom','Teacher','SubjectLesson')
+            ->where('school_year_id', $this->form_school_year_id)
+            ->whereIn('classroom_id', $this->form_classroom_id)
+            ->where('subject_lesson_id',$this->form_subject_lesson_id)->get();
             if($check_subject_lesson->count()){
                 $this->send_alert("warning","Pelajaran ".$check_subject_lesson->first()->SubjectLesson->subject_name." di kelas ".$check_subject_lesson->first()->Classroom->classname." sudah di ajarkan oleh ".$check_subject_lesson->first()->Teacher->teacher_name);
                 return false;
             }
 
-            // Cek data berdasarkan guru da mata pelajaran berdasarkan classroom
-            $check_teacher_and_subject_lesson = $querySchedule
+            // Cek data berdasarkan guru dan mata pelajaran berdasarkan classroom
+            $check_teacher_and_subject_lesson = Schedule::where('school_year_id', $this->form_school_year_id)
+            ->whereIn('classroom_id', $this->form_classroom_id)
             ->where('subject_lesson_id',$this->form_subject_lesson_id)
             ->where('teacher_id',$this->form_teacher_id)
-            ->whereIn('day_id',$this->form_day_id);
+            ->whereIn('day_id',$this->form_day_id)->get();
             if($check_teacher_and_subject_lesson->count()){
                 $this->send_alert('warning',"data sudah ada silahkan masukkan manual di menu schedule, fitur untuk melengkapi sisa jam pelajaran yang belum terisi atau kurang berdasarkan jam pelajaran guru secara otomatis belum tersedia, ini juga untuk menghindari duplikasi data");
                 return false;
             }
 
             // ambil data berdasarkan, school_year,classroom,day,no_lesson=0, teacher_id = null, subject_lesson = null
-            $query_to_select = $querySchedule
+            $query_to_select = Schedule::where('school_year_id', $this->form_school_year_id)
+            ->whereIn('classroom_id', $this->form_classroom_id)
             ->whereIn('day_id', $this->form_day_id)
             ->where('no_lesson', 0)
             ->whereNull('teacher_id')
-            ->whereNull('subject_lesson_id');
-
+            ->whereNull('subject_lesson_id')->get();
+            // dd($query_to_select);
             // Cek apakah jumlah jam pelajaran yang kosong tersedia dan tidak kurang dari jam mengajar guru 
             if($this->form_teaching_amount > $query_to_select->count()){
-                $this->send_alert('warning',"jam pelajaran yang tersedia kurang dari waktu jam mengajar guru");
+                $this->send_alert('warning',"jam pelajaran yang tersedia kurang dari waktu jam mengajar guru di hari yang telah dipilih, silahkan cek secara manual jumlah jam kosong di hari yang dipilih untuk memastikan");
                 return false;
             }else {
                 // Cek apakah kelas yang di ajar lebih banyak dibanding jumlah jam mengajar

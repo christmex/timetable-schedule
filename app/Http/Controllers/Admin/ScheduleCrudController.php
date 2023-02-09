@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Alert;
 use Carbon\Carbon;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Requests\ScheduleRequest;
@@ -19,6 +20,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class ScheduleCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
 
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -172,6 +174,9 @@ class ScheduleCrudController extends CrudController
             'name' => 'school_year_id', // the relationship name in your Migration
             'entity' => 'Schoolyear', // the relationship name in your Model
             'attribute' => 'school_year_name',
+            'attributes' => [
+                'readonly' => 'readonly'
+            ]
         ]);
 
         CRUD::addField([
@@ -179,6 +184,9 @@ class ScheduleCrudController extends CrudController
             'name' => 'classroom_id', // the relationship name in your Migration
             'entity' => 'Classroom', // the relationship name in your Model
             'attribute' => 'classname',
+            'attributes' => [
+                'readonly' => 'readonly'
+            ]
         ]);
 
         CRUD::addField([
@@ -186,6 +194,9 @@ class ScheduleCrudController extends CrudController
             'name' => 'timetable_id', // the relationship name in your Migration
             'entity' => 'Timetable', // the relationship name in your Model
             'attribute' => 'subject',
+            'attributes' => [
+                'readonly' => 'readonly'
+            ]
         ]);
 
         CRUD::field('teacher_id');
@@ -201,11 +212,78 @@ class ScheduleCrudController extends CrudController
             'name' => 'day_id', // the relationship name in your Migration
             'entity' => 'Day', // the relationship name in your Model
             'attribute' => 'day_name',
+            'attributes' => [
+                'readonly' => 'readonly'
+            ]
         ]);
 
         CRUD::field('no_lesson');
     }
 
+    public function update(){
+        // dd($this->crud->getRequest()->request->get('school_year_id'));
+        // $check = Schedule::with('Classroom','SchoolYear','Timetable','Day')
+        // ->where('school_year_id',$this->crud->getRequest()->request->get('school_year_id'))
+        // ->where('classroom_id',$this->crud->getRequest()->request->get('classroom_id'))
+        // ->where('timetable_id',$this->crud->getRequest()->request->get('timetable_id'))
+        // ->where('day_id',$this->crud->getRequest()->request->get('day_id'))
+        // // ->orWhere('subject_lesson_id',$this->crud->getRequest()->request->get('subject_lesson_id'))
+        // // ->orWhere('teacher_id',$this->crud->getRequest()->request->get('teacher_id'))
+        // ->first();
+
+        // dd($check->id != $this->crud->getRequest()->request->get('id'));
+        // // dd($this->crud->getRequest()->request->get('id'));
+        // // dd($this->crud->getStrippedSaveRequest($this->crud->validateRequest()));
+        // // dd($this->crud->getRequest()->request->get('id'));
+
+        // if($check && $check->id != $this->crud->getRequest()->request->get('id')){
+        //     \Alert::error("Class ".$check->Classroom->classname." with JP Lesson at ".$check->Timetable->subject." on ".$check->Day->day_name." in the ".$check->SchoolYear->school_year_name." school year is already there.")->flash();
+
+        //     return redirect()->back()->withInput();
+        // }else {
+            $this->crud->hasAccessOrFail('update');
+
+            // execute the FormRequest authorization and validation, if one is required
+            $request = $this->crud->validateRequest();
+
+            // register any Model Events defined on fields
+            $this->crud->registerFieldEvents();
+            
+            if($this->crud->getRequest()->request->get('subject_lesson_id') != 0){
+
+                $checkSubjectLesson = Schedule::with('Classroom','SchoolYear','Teacher','SubjectLesson')
+                ->where('school_year_id',$this->crud->getRequest()->request->get('school_year_id'))
+                ->where('classroom_id',$this->crud->getRequest()->request->get('classroom_id'))
+                ->where('subject_lesson_id',$this->crud->getRequest()->request->get('subject_lesson_id'))
+                ->orWhere('subject_lesson_id',0)
+                ->first();
+    
+                // dd($checkSubjectLesson);
+                if($checkSubjectLesson){
+                    \Alert::error("Pelajaran ".$checkSubjectLesson->SubjectLesson->subject_name." di kelas ".$checkSubjectLesson->Classroom->classname." tahun ajaran ".$checkSubjectLesson->SchoolYear->school_year_name." sudah di ajar oleh ".$checkSubjectLesson->teacher->teacher_name)->flash();
+                    return redirect()->back()->withInput();
+                }
+            }
+            // update the row in the db
+            $item = $this->crud->update(
+                $request->get($this->crud->model->getKeyName()),
+                $this->crud->getStrippedSaveRequest($request)
+            );
+            $this->data['entry'] = $this->crud->entry = $item;
+
+            // show a success message
+            \Alert::success(trans('backpack::crud.update_success'))->flash();
+
+            // save the redirect choice for next time
+            $this->crud->setSaveAction();
+
+            return $this->crud->performSaveAction($item->getKey());
+
+
+        // }
+
+
+    }
     public function store()
     {
         // $parsedUrl = parse_url(URL::previous());
