@@ -29,6 +29,8 @@ class DayCrudController extends CrudController
         CRUD::setModel(\App\Models\Day::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/day');
         CRUD::setEntityNameStrings('day', 'days');
+
+        
     }
 
     /**
@@ -39,6 +41,7 @@ class DayCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::removeAllButtons();
         CRUD::column('day_name');
 
         /**

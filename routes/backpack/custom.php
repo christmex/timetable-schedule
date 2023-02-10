@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Schedule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -26,4 +28,5 @@ Route::group([
     Route::crud('user', 'UserCrudController');
 
     Route::get('teacher-schedule', 'TeacherScheduleController@index')->name('teacher-schedule.index');
+    Route::post('/print-student-schedule', 'PrintController@student')->name('print-student-schedule');
 }); // this should be the absolute last line of this file

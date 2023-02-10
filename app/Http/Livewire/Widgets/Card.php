@@ -10,6 +10,7 @@ use App\Models\Classroom;
 use App\Models\Timetable;
 use App\Models\SchoolYear;
 use App\Models\SubjectLesson;
+use Illuminate\Database\Eloquent\Collection;
 
 class Card extends Component
 {
@@ -17,6 +18,7 @@ class Card extends Component
     public $classroom_id;
     public $day_id;
     public $timetable_id;
+    public $amount;
 
     public $resultFindIdleTeacher;
 
@@ -30,6 +32,45 @@ class Card extends Component
         $Classrooms = Classroom::all();
         $Days = Day::all();
         $Timetables = Timetable::all();
+
+
+        // $schedule = Schedule::with('SchoolYear','Classroom','Teacher','SubjectLesson','Timetable','Day')->get();
+
+        // $schedule->groupBy('school_year_id')->map(function (Collection $school_year_id) {
+        //     $school_year_id->groupBy('day_id')->map(function (Collection $day_id) {
+        //         $day_id->groupBy('classroom_id')->map(function (Collection $classroom_id) {
+        //             $classroom_id->pluck('subject_lesson_id');
+        //         });
+        //     });
+        // });
+
+        // dd($schedule);
+
+        // $test = Schedule::get();
+        // $groupByDay = $test->groupBy('day_id')->all();
+        // dd(collect($groupByDay)->groupBy(('classroom_id')));
+
+        // $test = Schedule::with('SchoolYear','Classroom','Teacher','SubjectLesson','Timetable','Day')->get();
+        // // $groupByDay = $test->groupBy(['day_id','classroom_id'])->all();
+        // $groupByDay = $test->groupBy(['day_id'])->all();
+        // foreach ($groupByDay as $value) {
+        //     echo $value."<br><br>";
+        // }
+        // die();
+        // dd($groupByDay);
+        // dd(collect($groupByDay)->groupBy(('classroom_id')));
+
+
+        // $test = Schedule::get()->groupBy('day_id', function ($query) {
+        //     $query->groupBy('classroom_id');
+        // })->all();
+
+        // dd($test);
+
+        // dd(collect($groupByDay)->groupBy(('classroom_id')));
+
+
+
 
         return view('livewire.widgets.card',compact('Teachers','Classrooms','SubjectLesson','SchoolYears','Classrooms','Days','Timetables'));
     }

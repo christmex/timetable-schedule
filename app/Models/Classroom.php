@@ -20,4 +20,12 @@ class Classroom extends Model
         ->whereNull('teacher_id')
         ->whereNull('subject_lesson_id');
     }
+
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class,'classroom_teacher','classroom_id','teacher_id')
+        ->withTimestamps()
+        ->withPivot(['school_year_id'])
+        ;
+    }
 }

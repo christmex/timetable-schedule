@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('school_years', function (Blueprint $table) {
-            $table->id();
-            $table->string('school_year_name')->unique();
-            $table->boolean('is_active')->nullable()->default(false);
+        Schema::create('classroom_teacher', function (Blueprint $table) {
+            // $table->id();
+            $table->foreignId('classroom_id')->constrained();
+            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('school_year_id')->constrained();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('school_years');
+        Schema::dropIfExists('classroom_teacher');
     }
 };

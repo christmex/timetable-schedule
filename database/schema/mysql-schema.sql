@@ -4,6 +4,23 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `classroom_teacher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `classroom_teacher` (
+  `classroom_id` bigint unsigned NOT NULL,
+  `teacher_id` bigint unsigned NOT NULL,
+  `school_year_id` bigint unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  KEY `classroom_teacher_classroom_id_foreign` (`classroom_id`),
+  KEY `classroom_teacher_teacher_id_foreign` (`teacher_id`),
+  KEY `classroom_teacher_school_year_id_foreign` (`school_year_id`),
+  CONSTRAINT `classroom_teacher_classroom_id_foreign` FOREIGN KEY (`classroom_id`) REFERENCES `classrooms` (`id`),
+  CONSTRAINT `classroom_teacher_school_year_id_foreign` FOREIGN KEY (`school_year_id`) REFERENCES `school_years` (`id`),
+  CONSTRAINT `classroom_teacher_teacher_id_foreign` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `classrooms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -47,7 +64,7 @@ DROP TABLE IF EXISTS `migrations`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -116,6 +133,7 @@ DROP TABLE IF EXISTS `school_years`;
 CREATE TABLE `school_years` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `school_year_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -181,14 +199,15 @@ CREATE TABLE `users` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-INSERT INTO `migrations` VALUES (340,'2014_10_12_000000_create_users_table',1);
-INSERT INTO `migrations` VALUES (341,'2014_10_12_100000_create_password_resets_table',1);
-INSERT INTO `migrations` VALUES (342,'2019_08_19_000000_create_failed_jobs_table',1);
-INSERT INTO `migrations` VALUES (343,'2019_12_14_000001_create_personal_access_tokens_table',1);
-INSERT INTO `migrations` VALUES (344,'2022_12_14_041530_create_classrooms_table',1);
-INSERT INTO `migrations` VALUES (345,'2022_12_14_041602_create_teachers_table',1);
-INSERT INTO `migrations` VALUES (346,'2022_12_14_041619_create_school_years_table',1);
-INSERT INTO `migrations` VALUES (347,'2022_12_14_041637_create_days_table',1);
-INSERT INTO `migrations` VALUES (348,'2022_12_14_042601_create_subject_lessons_table',1);
-INSERT INTO `migrations` VALUES (349,'2022_12_14_042724_create_timetables_table',1);
-INSERT INTO `migrations` VALUES (350,'2022_12_14_044848_create_schedules_table',1);
+INSERT INTO `migrations` VALUES (412,'2014_10_12_000000_create_users_table',1);
+INSERT INTO `migrations` VALUES (413,'2014_10_12_100000_create_password_resets_table',1);
+INSERT INTO `migrations` VALUES (414,'2019_08_19_000000_create_failed_jobs_table',1);
+INSERT INTO `migrations` VALUES (415,'2019_12_14_000001_create_personal_access_tokens_table',1);
+INSERT INTO `migrations` VALUES (416,'2022_12_14_041530_create_classrooms_table',1);
+INSERT INTO `migrations` VALUES (417,'2022_12_14_041602_create_teachers_table',1);
+INSERT INTO `migrations` VALUES (418,'2022_12_14_041619_create_school_years_table',1);
+INSERT INTO `migrations` VALUES (419,'2022_12_14_041637_create_days_table',1);
+INSERT INTO `migrations` VALUES (420,'2022_12_14_042601_create_subject_lessons_table',1);
+INSERT INTO `migrations` VALUES (421,'2022_12_14_042724_create_timetables_table',1);
+INSERT INTO `migrations` VALUES (422,'2022_12_14_044848_create_schedules_table',1);
+INSERT INTO `migrations` VALUES (423,'2023_02_10_061152_create_classroom_teacher_table',1);

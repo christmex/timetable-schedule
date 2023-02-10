@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SchoolYearRequest extends FormRequest
@@ -25,7 +26,11 @@ class SchoolYearRequest extends FormRequest
     public function rules()
     {
         return [
-            'school_year_name' => 'required|unique:school_years'
+            'school_year_name' => [
+                'required',
+                Rule::unique('school_years')->ignore(request()->id),
+            ],
+            'is_active' => Rule::unique('school_years')->where(fn ($query) => $query->where('is_active', 1))->ignore(request()->id), 
         ];
     }
 

@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\SchoolYear::create([
             'school_year_name' => '2022/2023',
+            'is_active' => 1,
             
         ]);
         
@@ -236,7 +237,7 @@ class DatabaseSeeder extends Seeder
             "end" => "09:10:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 09:10:00",
+            "subject" => "Break kelas kecil 09:10:00",
             "start" => "09:10:00",
             "end" => "09:25:00",
         ]);

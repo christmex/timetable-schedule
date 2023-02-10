@@ -79,6 +79,17 @@ class Index extends Component
             // ->whereIn('classroom_id', $this->form_classroom_id)
             // ->get();
 
+            // Cek data berdasarkan guru dan mata pelajaran berdasarkan classroom
+            $check_teacher_and_subject_lesson = Schedule::where('school_year_id', $this->form_school_year_id)
+            ->whereIn('classroom_id', $this->form_classroom_id)
+            ->where('subject_lesson_id',$this->form_subject_lesson_id)
+            ->where('teacher_id',$this->form_teacher_id)
+            ->whereIn('day_id',$this->form_day_id)->get();
+            if($check_teacher_and_subject_lesson->count()){
+                $this->send_alert('warning',"jadwal sudah ada silahkan masukkan manual di menu schedule, fitur untuk melengkapi sisa jam pelajaran yang belum terisi atau kurang berdasarkan jam pelajaran guru secara otomatis belum tersedia, ini juga untuk menghindari duplikasi data");
+                return false;
+            }
+
             // Cek jika mata pelajaran yang dipilih sudah terdapat guru yang mengajar di kelas itu
             $check_subject_lesson = Schedule::with('Classroom','Teacher','SubjectLesson')
             ->where('school_year_id', $this->form_school_year_id)
@@ -89,19 +100,8 @@ class Index extends Component
                 return false;
             }
 
-            // Cek data berdasarkan guru dan mata pelajaran berdasarkan classroom
-            $check_teacher_and_subject_lesson = Schedule::where('school_year_id', $this->form_school_year_id)
-            ->whereIn('classroom_id', $this->form_classroom_id)
-            ->where('subject_lesson_id',$this->form_subject_lesson_id)
-            ->where('teacher_id',$this->form_teacher_id)
-            ->whereIn('day_id',$this->form_day_id)->get();
-            if($check_teacher_and_subject_lesson->count()){
-                $this->send_alert('warning',"data sudah ada silahkan masukkan manual di menu schedule, fitur untuk melengkapi sisa jam pelajaran yang belum terisi atau kurang berdasarkan jam pelajaran guru secara otomatis belum tersedia, ini juga untuk menghindari duplikasi data");
-                return false;
-            }
-
             // ambil data berdasarkan, school_year,classroom,day,no_lesson=0, teacher_id = null, subject_lesson = null
-            $query_to_select = Schedule::where('school_year_id', $this->form_school_year_id)
+            $query_to_select = Schedule::with('Timetable')->where('school_year_id', $this->form_school_year_id)
             ->whereIn('classroom_id', $this->form_classroom_id)
             ->whereIn('day_id', $this->form_day_id)
             ->where('no_lesson', 0)
@@ -133,34 +133,81 @@ class Index extends Component
                             $this->send_alert('warning',"Silahkan cek kembali, jam mengajar tidak balance dengan jumlah kelas yang di ajar");
                             return false;
                         }else {
-                            $total_jp_bagi_kelas_dibagi_hari = $jp_bagi_kelas / count($this->form_day_id);
-                            $convert_query_to_select = $query_to_select->groupBy('day_id')->all();//convert or group by day
+                            // Membagi jam mengajar tiap kelas dengan hari yang dipilih
+                            // $total_jp_bagi_kelas_dibagi_hari = $jp_bagi_kelas / count($this->form_day_id);
+                            $total_jp_bagi_kelas_dibagi_hari = floor($jp_bagi_kelas / count($this->form_day_id));
+                            $convert_query_to_select = $query_to_select->groupBy('day_id')->sortBy('Timetable.start')->all();//convert or group by day
 
+                            // Kalkulasi kekurangan dari variabel $total_jp_bagi_kelas_dibagi_hari
+                            // $calculate_missing_jp = ($jp_bagi_kelas - ($total_jp_bagi_kelas_dibagi_hari * count($this->form_day_id)));
+                            $calculate_missing_jp = ($jp_bagi_kelas - ($total_jp_bagi_kelas_dibagi_hari * count($this->form_day_id))) * count($this->form_classroom_id); //* count classroom semisal ada classroom lebih dari 1 yang dipilih, tapi seharusnya ini tidak terjadi karna sudah di handle di bagian pengecekan $cek_selisih
+                            
                             $collection_jp_id = [];
                             $final_collection_jp_id = [];
-
+                            // dd($calculate_missing_jp);
+                            
+                            // CORE
+                            // perulangan berdasarkan hari, banyaknya perulangan tergantung hari yang di checklist di form
                             foreach ($convert_query_to_select as $Byday) {
+                                // Perulangan berapa banyak kelas yang dipilih di form
                                 for ($j=0; $j < count($this->form_classroom_id); $j++) {
-                                    
+
+                                    // Ambil kelas yang sedang aktif dan hari yang sedang aktif
                                     $select_class = $Byday->where('classroom_id', $this->form_classroom_id[$j]);
-                                    $random = rand(0, count($select_class) - $total_jp_bagi_kelas_dibagi_hari);
 
-                                    array_push($collection_jp_id, collect($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->modelKeys())->toArray());
+                                    if($calculate_missing_jp){
+
+                                        // Ambil secara random index berapa
+                                        $random = rand(0, count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1));
+                                        // dd(count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1));
+                                        array_push($collection_jp_id, collect($select_class->skip($random)->take(($total_jp_bagi_kelas_dibagi_hari + 1))->modelKeys())->toArray());
+
+                                        $calculate_missing_jp = $calculate_missing_jp - 1;
+                                    }else {
+                                        // Ambil secara random index berapa
+                                        $random = rand(0, count($select_class) - $total_jp_bagi_kelas_dibagi_hari);
+                                        
+                                        // dd(collect($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->modelKeys())->toArray());
+                                        array_push($collection_jp_id, collect($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->modelKeys())->toArray());
+                                    }
+
                                 }
-                            }
 
+                                // Perulangan untuk memasukkan jam pelajaran yang kurang karna pembagian hari, ini ada sejak calculate missing jp ada
+                                // if($calculate_missing_jp){
+                                //     for ($j=0; $j < count($this->form_classroom_id); $j++) {
+
+                                //         // Ambil kelas yang sedang aktif dan hari yang sedang aktif
+                                //         $select_class = $Byday->where('classroom_id', $this->form_classroom_id[$j]);
+                                        
+                                //         // Ambil secara random index berapa
+                                //         $random = rand(0, count($select_class) - $total_jp_bagi_kelas_dibagi_hari);
+                                        
+                                //         dd($total_jp_bagi_kelas_dibagi_hari);
+                                //         // dd(collect($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->modelKeys())->toArray());
+                                //         array_push($collection_jp_id, collect($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->modelKeys())->toArray());
+                                //     }
+                                // }
+                            }
+                            // CORE
+
+                            // For extract values result from the core 
                             for ($i=0; $i < count($collection_jp_id); $i++) {
                                 for ($j=0; $j < count(array_values($collection_jp_id[$i])); $j++) { 
                                     array_push($final_collection_jp_id, array_values($collection_jp_id[$i])[$j]);
                                     
                                 }
                             }
+                            // For extract values result from the core 
+                            // dd(Schedule::whereIn('id', $final_collection_jp_id)->get()->where('no_lesson',1));
 
                             // update the data
                             $update_data = Schedule::whereIn('id', $final_collection_jp_id)->update([
                                 'teacher_id' => $this->form_teacher_id,
                                 'subject_lesson_id' => $this->form_subject_lesson_id,
                             ]);
+
+                            // dd($update_data);
 
                             // Send alert to script and reset All error
                             if($update_data){

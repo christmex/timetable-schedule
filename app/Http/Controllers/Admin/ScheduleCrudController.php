@@ -48,6 +48,12 @@ class ScheduleCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addColumn([
+            'name'      => 'row_number',
+            'type'      => 'row_number',
+            'label'     => '#',
+            'orderable' => false,
+        ])->makeFirstColumn();
         CRUD::addColumn([
             "name" => "school_year_id",
             "label" => "School Year",

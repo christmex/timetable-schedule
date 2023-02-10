@@ -11,6 +11,7 @@ class SchoolYear extends Model
     use HasFactory;
 
     protected $fillable = [
-        'school_year_name'
+        'school_year_name',
+        'is_active',
     ];
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\SchoolYearRequest;
+use App\Http\Requests\UpdateSchoolyearRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -40,6 +41,7 @@ class SchoolYearCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('school_year_name');
+        CRUD::column('is_active');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -59,6 +61,7 @@ class SchoolYearCrudController extends CrudController
         CRUD::setValidation(SchoolYearRequest::class);
 
         CRUD::field('school_year_name');
+        CRUD::field('is_active')->type('boolean');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -76,5 +79,8 @@ class SchoolYearCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+        // CRUD::setValidation(UpdateSchoolyearRequest::class);
+        // CRUD::field('school_year_name');
+        // CRUD::field('is_active')->type('boolean');
     }
 }
