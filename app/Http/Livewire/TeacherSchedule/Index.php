@@ -214,7 +214,7 @@ class Index extends Component
                                 $this->send_alert('success',"Success adding new teacher schedule");
                                 $this->resetAll();
                             }else {
-                                $this->send_alert('error',"Failed");
+                                $this->send_alert('error',"Failed adding new teacher schedule");
                                 return false;
                             }
 
