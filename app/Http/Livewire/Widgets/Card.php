@@ -24,7 +24,8 @@ class Card extends Component
 
     public function render()
     {
-        $Teachers = Teacher::count();
+
+        $Teachers = Teacher::all();
         // $Classroom = Classroom::count();
         $SubjectLesson = SubjectLesson::count();
 

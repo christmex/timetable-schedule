@@ -19,4 +19,12 @@ class Teacher extends Model
         return $this->hasMany(Schedule::class);
     }
 
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class,'classroom_teacher','teacher_id','classroom_id')
+        ->withTimestamps()
+        ->withPivot(['school_year_id'])
+        ;
+    }
+
 }

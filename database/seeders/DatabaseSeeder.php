@@ -222,7 +222,7 @@ class DatabaseSeeder extends Seeder
 
 
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 07:30:00",
+            "subject" => "Homeroom 07:30",
             "start" => "07:30:00",
             "end" => "08:00:00",
         ]);
@@ -237,7 +237,7 @@ class DatabaseSeeder extends Seeder
             "end" => "09:10:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Break kelas kecil 09:10:00",
+            "subject" => "Break KK 09:10",
             "start" => "09:10:00",
             "end" => "09:25:00",
         ]);
@@ -248,6 +248,11 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Timetable::create([
             "subject" => "Pelajaran 09:45:00",
+            "start" => "09:45:00",
+            "end" => "10:00:00",
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Break KB 09:45",
             "start" => "09:45:00",
             "end" => "10:00:00",
         ]);

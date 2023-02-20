@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-body p-3 d-flex align-items-center"><i class="la la-cogs bg-primary p-3 font-2xl mr-3"></i>
                 <div>
-                    <div class="text-value-sm text-primary">{{$Teachers}}</div>
+                    <div class="text-value-sm text-primary">{{$Teachers->count()}}</div>
                     <div class="text-muted text-uppercase font-weight-bold small">Teachers</div>
                 </div>
                 </div>
@@ -51,8 +51,7 @@
             <div class="card">
                 <div class="card-header"><strong>Print schedule for student</strong><i> *Go to Teachers Menu for print Teacher's Schedule</i></div>
                 <div class="card-body">
-                    <form action="{{backpack_url('print-student-schedule')}}" method="post" target="_blank">
-                        @csrf
+                    <form action="{{backpack_url('print-student-schedule')}}" method="get" target="_blank">
                         <div class="row">
                             <div class="form-group col-sm-12">
                                 <label for="school_years">School Year</label>
@@ -81,6 +80,43 @@
                                 @error('amount') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div> -->
 
+                            <div class="form-group col-sm-12">
+                                <button type="submit" class="btn btn-primary btn-block"> Print </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>    
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header"><strong>Print schedule for teacher</strong></div>
+                <div class="card-body">
+                    <form action="{{backpack_url('print-teacher-schedule')}}" method="post" target="_blank">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-sm-12">
+                                <label for="school_years">School Year</label>
+                                <select name=school_year_id class="form-control select inline @error('school_year_id')is-invalid @enderror" id="school_years" required>
+                                    <option value="" selected>-- Choosen one --</option>
+                                    @foreach($SchoolYears as $schoolyear)
+                                        <option value="{{$schoolyear->id}}">{{$schoolyear->school_year_name}}</option>
+                                    @endforeach
+                                </select elect>
+                                @error('school_year_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="teachers">Teacher</label>
+                                <select name=teacher_id class="form-control select inline @error('teacher_id')is-invalid @enderror" id="teachers" required>
+                                    <option value="" selected>-- Choosen one --</option>
+                                    @foreach($Teachers as $teacher)
+                                        <option value="{{$teacher->id}}">{{$teacher->teacher_name}}</option>
+                                    @endforeach
+                                </select elect>
+                                @error('teacher_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
                             <div class="form-group col-sm-12">
                                 <button type="submit" class="btn btn-primary btn-block"> Print </button>
                             </div>

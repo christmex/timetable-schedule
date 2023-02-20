@@ -82,7 +82,7 @@ class ScheduleCrudController extends CrudController
             "type" => "select",
             "attribute" => "subject_name"
         ]);
-        CRUD::column('no_lesson');
+        // CRUD::column('no_lesson');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -127,6 +127,10 @@ class ScheduleCrudController extends CrudController
             'attribute' => 'subject',
             'model'     => "App\Models\Timetable",
             // 'pivot'     => true,
+            // 'options'     => function($query){
+            //     // dd($query->get('subject'));
+            //     return $query->get('subject');
+            // },
         ]);
         CRUD::addField([
             'type'      => 'checklist',
@@ -257,18 +261,23 @@ class ScheduleCrudController extends CrudController
             
             if($this->crud->getRequest()->request->get('subject_lesson_id') != 0){
 
+                // Ini untuk melakukan pengecekan apakah ada guru yang sudah mengajar di kelas yg terpilih dengan mata pelajaran yang sama, jika ada maka kasih error pesan di bawah, jika tidak or gurunya sama maka boleh, tpi ini masih dipertimbangkan, bagaimana jjika satu kelas 1 mapel 2 guru?
                 $checkSubjectLesson = Schedule::with('Classroom','SchoolYear','Teacher','SubjectLesson')
                 ->where('school_year_id',$this->crud->getRequest()->request->get('school_year_id'))
                 ->where('classroom_id',$this->crud->getRequest()->request->get('classroom_id'))
                 ->where('subject_lesson_id',$this->crud->getRequest()->request->get('subject_lesson_id'))
                 ->orWhere('subject_lesson_id',0)
                 ->first();
-    
-                // dd($checkSubjectLesson);
-                if($checkSubjectLesson){
+
+                if(!(($this->crud->getRequest()->request->get('subject_lesson_id') == $checkSubjectLesson->SubjectLesson->id) && ($this->crud->getRequest()->request->get('teacher_id') == $checkSubjectLesson->teacher->id))){
                     \Alert::error("Pelajaran ".$checkSubjectLesson->SubjectLesson->subject_name." di kelas ".$checkSubjectLesson->Classroom->classname." tahun ajaran ".$checkSubjectLesson->SchoolYear->school_year_name." sudah di ajar oleh ".$checkSubjectLesson->teacher->teacher_name)->flash();
                     return redirect()->back()->withInput();
                 }
+    
+                // if($checkSubjectLesson){
+                //     \Alert::error("Pelajaran ".$checkSubjectLesson->SubjectLesson->subject_name." di kelas ".$checkSubjectLesson->Classroom->classname." tahun ajaran ".$checkSubjectLesson->SchoolYear->school_year_name." sudah di ajar oleh ".$checkSubjectLesson->teacher->teacher_name)->flash();
+                //     return redirect()->back()->withInput();
+                // }
             }
             // update the row in the db
             $item = $this->crud->update(
@@ -312,7 +321,7 @@ class ScheduleCrudController extends CrudController
             $getNoLesson = json_decode($this->crud->getRequest()->request->get('no_lesson'), true);
 
             $getAllDataForCheck = $this->crud->model->all();
-            
+            // dd($getDay);
             $query = [];
             for ($i=0; $i < count($getClassroom); $i++) {
                 for ($k=0; $k < count($getDay); $k++) { 
@@ -320,7 +329,7 @@ class ScheduleCrudController extends CrudController
                     $checkfirst = $getAllDataForCheck
                     ->where('school_year_id', $this->crud->getRequest()->request->get('school_year_id'))
                     ->where('classroom_id',$getClassroom[$i])
-                    ->where('day_id',$getDay[$i])
+                    ->where('day_id',$getDay[$k])
                     ->where('timetable_id',$getTimetable[$l]);
                         if(!count($checkfirst)){
                             $query[] = [

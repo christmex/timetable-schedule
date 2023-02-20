@@ -1,5 +1,7 @@
 <div>
-<div class="row">
+    <div class="row">
+    </div>
+    <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
@@ -38,6 +40,14 @@
                                             <label class="font-weight-normal mr-3">
                                                 <input type="checkbox" wire:model="form_classroom_id" value="{{$classroom->id}}" id="classrooms" class="inline @error('form_classroom_id')is-invalid @enderror" @if($classroom->schedules_count == 0) disabled @endif> {{$classroom->classname}}
                                             </label>
+                                            @if($classroom->schedules_count) 
+                                                <a href="{{backpack_url('print-student-schedule')}}/?classroom_id={{$classroom->id}}&school_year_id={{$this->form_school_year_id}}" target="_blank" class="badge badge-warning">CHECK AVAILABLE SLOT</a>
+                                            @endif
+                                            <!-- <form action="{{backpack_url('print-student-schedule')}}" method="get" target="_blank" style="display:inline">
+                                                <input type="hidden" name="classroom_id" value="{{$classroom->id}}">
+                                                <input type="hidden" name="school_year_id" value="{{$this->form_school_year_id}}">
+                                                <button type="submit" class="badge badge-warning"> CHECK AVAILABLE SLOT </button>
+                                            </form> -->
                                         </div>
                                     </div>
                                     @endforeach

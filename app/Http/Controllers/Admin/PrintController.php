@@ -31,11 +31,27 @@ class PrintController extends Controller
         
         
 
-        $schedule = Schedule::with('SchoolYear', 'Classroom', 'Teacher', 'SubjectLesson', 'Timetable', 'Day')
-        ->where('school_year_id',$request->school_year_id)
-        ->where('classroom_id',$request->classroom_id)
+        // $schedule = Schedule::with('SchoolYear', 'Classroom', 'Teacher', 'SubjectLesson', 'Timetable', 'Day')
+        // ->orderBy('Timetable.start','asc')
+        // ->where('school_year_id',$request->school_year_id)
+        // ->where('classroom_id',$request->classroom_id)
+        // ->get();
+
+        $schedule = Schedule::where('schedules.school_year_id', $request->school_year_id)
+        ->where('schedules.classroom_id', $request->classroom_id)
+        ->leftJoin('school_years', 'schedules.school_year_id', '=', 'school_years.id')
+        ->leftJoin('classrooms', 'schedules.classroom_id', '=', 'classrooms.id')
+        ->leftJoin('teachers', 'schedules.teacher_id', '=', 'teachers.id')
+        ->leftJoin('subject_lessons', 'schedules.subject_lesson_id', '=', 'subject_lessons.id')
+        ->leftJoin('timetables', 'schedules.timetable_id', '=', 'timetables.id')
+        ->leftJoin('days', 'schedules.day_id', '=', 'days.id')
+        ->select('schedules.*')
+        // pakai ini kalau mau query ke db lebih baik dan optimal
+        ->with('SchoolYear', 'Classroom', 'Teacher', 'SubjectLesson', 'Timetable', 'Day')
         ->get();
-        // dd($schedule->count());
+
+        
+        // dd($schedule);
         if($schedule->count()){
 
             $Days = Day::all();
@@ -90,7 +106,11 @@ class PrintController extends Controller
             // });
     
             // $result = $schedule->groupBy('timetable_id')->map(function (Collection $TimetableSubject) {
-            $result = $schedule->groupBy('Timetable.subject')->map(function (Collection $TimetableSubject) {
+            // dd($schedule->sortBy('Timetable.start')->groupBy('Timetable.subject'));
+            // not order
+            // $result = $schedule->groupBy('Timetable.subject')->sortBy('Timetables.start')->map(function (Collection $TimetableSubject) {
+                //with order Timetable.start
+                $result = $schedule->sortBy('Timetable.start')->groupBy('Timetable.subject')->map(function (Collection $TimetableSubject) {
                 return $TimetableSubject->sortBy('start')->groupBy('Day.day_name')->map(
     
                     function (Collection $DayName) {
@@ -147,5 +167,50 @@ class PrintController extends Controller
             return redirect()->back();
         }
 
+    }
+
+    public function teacher(Request $request){
+        $schedule = Schedule::with('SchoolYear', 'Classroom', 'Teacher', 'SubjectLesson', 'Timetable', 'Day')
+        // ->rightJoin('days', 'schedules.day_id', '=', 'days.id')
+        // ->select('schedules.*', 'days.day_name','days.id')
+        // ->crossJoin("days")
+        ->where('school_year_id',$request->school_year_id)
+        ->where('teacher_id',$request->teacher_id)
+        ->get();
+
+        // Gunakan cross join or push untuk memasukkan hari yang tidak ada di dalam data
+        // return $schedule;
+        // dd($schedule);
+        if($schedule->count()){
+
+            $Days = Day::get();
+            $ActiveSchoolyear = $schedule->first()->SchoolYear->school_year_name;
+            $ActiveClassroom = $schedule->first()->Classroom->classname;
+            // return $Days;
+            $result = $schedule->groupBy('Timetable.subject')->sortBy('start')->map(function (Collection $TimetableSubject) {
+                // return $Days;
+                return $TimetableSubject->groupBy('Day.day_name')->map(function (Collection $DayName) {
+                        // return $DayName->sortBy('day_id')->map(function ($schedule) {
+                        return $DayName->sortBy('day_id')->map(function ($schedule) {
+                            return [
+                                // 'subject_lesson' => $schedule -> SubjectLesson,
+                                'subject_lesson' => $schedule -> SubjectLesson ? $schedule -> SubjectLesson -> only('subject_name')['subject_name'] : null,
+                                'classroom' => $schedule -> Classroom ? $schedule -> Classroom -> only('classname')['classname'] : null,
+                                // 'is_break' => $schedule->no_lesson,
+                                // 'timetable' => $schedule -> timetable_id 
+                            ];
+                        });
+                    }
+                );
+            });
+
+            return $result;
+            // dd($result);
+            return view('custom.print-teacher-schedule',compact('result','Days','ActiveSchoolyear','ActiveClassroom'));
+        }else {
+            Alert::add('warning', 'No data!')->flash();
+
+            return redirect()->back();
+        }
     }
 }

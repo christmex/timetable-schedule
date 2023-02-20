@@ -38,7 +38,6 @@ class Index extends Component
 
     public function mount(){
         $this->SchoolYears = SchoolYear::latest()->get();
-        
         $this->Teachers = Teacher::all();
         $this->SubjectLessons = SubjectLesson::all();
     }
@@ -47,6 +46,7 @@ class Index extends Component
     {
         $this->Days = Day::withCount('Schedules')->get();
         $this->Classrooms = Classroom::withCount('Schedules')->get();
+        $this->form_school_year_id = $this->SchoolYears->where('is_active',true)->first()->id;
         return view('livewire.teacher-schedule.index');
     }
 

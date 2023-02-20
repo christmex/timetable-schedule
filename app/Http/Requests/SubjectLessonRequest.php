@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SubjectLessonRequest extends FormRequest
@@ -26,6 +27,10 @@ class SubjectLessonRequest extends FormRequest
     {
         return [
             // 'name' => 'required|min:5|max:255'
+            'subject_name' => [
+                'required',
+                Rule::unique('subject_lessons')->ignore(request()->id),
+            ],
         ];
     }
 

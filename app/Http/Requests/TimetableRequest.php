@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TimetableRequest extends FormRequest
@@ -25,7 +26,9 @@ class TimetableRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject' => 'required|unique:timetables'
+            // 'subject' => 'required|unique:timetables'
+            'subject' => ['required',Rule::unique('timetables')->ignore(request()->id),]
+            
         ];
     }
 

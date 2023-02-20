@@ -28,5 +28,6 @@ Route::group([
     Route::crud('user', 'UserCrudController');
 
     Route::get('teacher-schedule', 'TeacherScheduleController@index')->name('teacher-schedule.index');
-    Route::post('/print-student-schedule', 'PrintController@student')->name('print-student-schedule');
+    Route::get('/print-student-schedule', 'PrintController@student')->name('print-student-schedule');
+    Route::post('/print-teacher-schedule', 'PrintController@teacher')->name('print-teacher-schedule');
 }); // this should be the absolute last line of this file
