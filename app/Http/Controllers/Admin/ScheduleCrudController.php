@@ -122,15 +122,20 @@ class ScheduleCrudController extends CrudController
         ]);
         CRUD::addField([
             'type'      => 'checklist',
+            // 'type'      => 'custom_checklist',
             'name'      => 'timetable_id',
             'entity'    => 'Timetable',
             'attribute' => 'subject',
             'model'     => "App\Models\Timetable",
             // 'pivot'     => true,
-            // 'options'     => function($query){
-            //     // dd($query->get('subject'));
-            //     return $query->get('subject');
-            // },
+            'options'     => function($query){
+                $query = $query->select('id','subject')->orderBy('start','ASC')->get()->toArray();
+                $result = [];
+                for ($i=0; $i < count($query); $i++) { 
+                    $result[$query[$i]['id']] = $query[$i]['subject'];
+                }
+                return $result;
+            },
         ]);
         CRUD::addField([
             'type'      => 'checklist',
@@ -157,7 +162,15 @@ class ScheduleCrudController extends CrudController
             'entity'    => 'Timetable',
             'attribute' => 'subject',
             'model'     => "App\Models\Timetable",
-            'pivot'     => true,
+            // 'pivot'     => true,
+            'options'     => function($query){
+                $query = $query->select('id','subject')->orderBy('start','ASC')->get()->toArray();
+                $result = [];
+                for ($i=0; $i < count($query); $i++) { 
+                    $result[$query[$i]['id']] = $query[$i]['subject'];
+                }
+                return $result;
+            },
         ]);
         // CRUD::field('no_lesson');
 
