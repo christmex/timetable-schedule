@@ -15,6 +15,7 @@ class PrintController extends Controller
 {
     //
     public function student(Request $request){
+        // dd(Teacher::withCount('Schedules')->get());
 
         // Use this for assign the homeroom teacher for every class with school year
         // $tc = Teacher::find(1);

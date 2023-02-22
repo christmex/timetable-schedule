@@ -144,22 +144,57 @@ class Index extends Component
                             
                             $collection_jp_id = [];
                             $final_collection_jp_id = [];
-                            // dd($calculate_missing_jp);
+                            $timetable_for_check = [];
+
+
+                            // Get all timetable  based on teacher, day 
+                            $get_teacher_timetable_based_on_day = Schedule::where('school_year_id', $this->form_school_year_id)
+                            ->whereIn('day_id', $this->form_day_id)
+                            ->where('teacher_id', $this->form_teacher_id)->get();
+
+                            $teacher_all_timetable = array_unique($get_teacher_timetable_based_on_day->pluck('timetable_id')->toArray());
+                            
+
+                            // For checking, apa jam pelajaran di hari yang telah dipilih cukup untuk tiap jp semisal di hari senin dan selasa tersisa 2 slot jp yg kosong, namun kelas punya 3 jp otomatis tidak bsa
+                            for ($i=0; $i < count($this->form_classroom_id); $i++) { 
+                                if(!($query_to_select->where('classroom_id',$this->form_classroom_id[$i])->count() >= $jp_bagi_kelas)){
+                                    $this->send_alert('warning',"Slot jam pelajaran yang tersedia di hari yang terpilih, tidak cukup");
+                                    return false;
+                                }
+                            }
                             
                             // CORE
                             // perulangan berdasarkan hari, banyaknya perulangan tergantung hari yang di checklist di form
                             foreach ($convert_query_to_select as $Byday) {
                                 // Perulangan berapa banyak kelas yang dipilih di form
                                 for ($j=0; $j < count($this->form_classroom_id); $j++) {
+                                    // Cek apakah hari yang dipilih dan kelas yang dipilih memiliki jam yang sama
 
                                     // Ambil kelas yang sedang aktif dan hari yang sedang aktif
-                                    $select_class = $Byday->where('classroom_id', $this->form_classroom_id[$j]);
+                                    $select_class = $Byday->where('classroom_id', $this->form_classroom_id[$j])->whereNotIn('timetable_id', $timetable_for_check);
 
+                                    if(count($teacher_all_timetable)){
+                                        $select_class = $select_class->whereNotIn('timetable_id', $teacher_all_timetable);
+                                    }
+
+                                    $select_class = $select_class->sortBy('Timetable.start');
+                                    
+                                    if(!count($select_class)){
+                                        $this->send_alert('warning',"Jam pelajaran yang tersedia tabrakan, guru sudah mengajar di beberapa kelas di jam yang sama, silahkan cek slot untuk melihat detail");
+                                        return false;
+                                    }
+                                    
+                                    // if($j == 0){
+                                    //     print_r($timetable_for_check);
+                                    //     // dd($timetable_for_check);
+                                    //     dd($select_class);
+                                    // }
                                     if($calculate_missing_jp){
 
                                         // Ambil secara random index berapa
                                         $random = rand(0, count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1));
                                         // dd(count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1));
+                                        $timetable_for_check = array_merge($select_class->skip($random)->take(($total_jp_bagi_kelas_dibagi_hari + 1))->pluck('timetable_id')->toArray(), $timetable_for_check);
                                         array_push($collection_jp_id, collect($select_class->skip($random)->take(($total_jp_bagi_kelas_dibagi_hari + 1))->modelKeys())->toArray());
 
                                         $calculate_missing_jp = $calculate_missing_jp - 1;
@@ -168,10 +203,12 @@ class Index extends Component
                                         $random = rand(0, count($select_class) - $total_jp_bagi_kelas_dibagi_hari);
                                         
                                         // dd(collect($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->modelKeys())->toArray());
+                                        $timetable_for_check = array_merge($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->pluck('timetable_id')->toArray(), $timetable_for_check);
                                         array_push($collection_jp_id, collect($select_class->skip($random)->take($total_jp_bagi_kelas_dibagi_hari)->modelKeys())->toArray());
                                     }
-
                                 }
+                                // Reset new data everytime change day
+                                $timetable_for_check = [];
 
                                 // Perulangan untuk memasukkan jam pelajaran yang kurang karna pembagian hari, ini ada sejak calculate missing jp ada
                                 // if($calculate_missing_jp){
@@ -190,6 +227,7 @@ class Index extends Component
                                 // }
                             }
                             // CORE
+                            // dd($collection_jp_id);
 
                             // For extract values result from the core 
                             for ($i=0; $i < count($collection_jp_id); $i++) {
@@ -198,6 +236,7 @@ class Index extends Component
                                     
                                 }
                             }
+                            // dd($final_collection_jp_id);
                             // For extract values result from the core 
                             // dd(Schedule::whereIn('id', $final_collection_jp_id)->get()->where('no_lesson',1));
 

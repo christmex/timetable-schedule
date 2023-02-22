@@ -227,12 +227,12 @@ class DatabaseSeeder extends Seeder
             "end" => "08:00:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 08:00:00",
+            "subject" => "Pelajaran 08:00",
             "start" => "08:00:00",
             "end" => "08:35:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 08:35:00",
+            "subject" => "Pelajaran 08:35",
             "start" => "08:35:00",
             "end" => "09:10:00",
         ]);
@@ -242,12 +242,12 @@ class DatabaseSeeder extends Seeder
             "end" => "09:25:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 09:10:00",
+            "subject" => "Pelajaran 09:10",
             "start" => "09:10:00",
             "end" => "09:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 09:45:00",
+            "subject" => "Pelajaran 09:45",
             "start" => "09:45:00",
             "end" => "10:00:00",
         ]);
@@ -257,52 +257,52 @@ class DatabaseSeeder extends Seeder
             "end" => "10:00:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 10:00:00",
+            "subject" => "Pelajaran 10:00",
             "start" => "10:00:00",
             "end" => "10:35:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 10:35:00",
+            "subject" => "Pelajaran 10:35",
             "start" => "10:35:00",
             "end" => "11:10:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 11:10:00",
+            "subject" => "Pelajaran 11:10",
             "start" => "11:10:00",
             "end" => "11:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 11:45:00",
+            "subject" => "Pelajaran 11:45",
             "start" => "11:45:00",
             "end" => "12:20:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 12:20:00",
+            "subject" => "Pelajaran 12:20",
             "start" => "12:20:00",
             "end" => "12:55:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 12:55:00",
+            "subject" => "Pelajaran 12:55",
             "start" => "12:55:00",
             "end" => "13:30:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 13:30:00",
+            "subject" => "Pelajaran 13:30",
             "start" => "13:30:00",
             "end" => "13:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 13:45:00",
+            "subject" => "Pelajaran 13:45",
             "start" => "13:45:00",
             "end" => "14:20:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 14:20:00",
+            "subject" => "Pelajaran 14:20",
             "start" => "14:20:00",
             "end" => "14:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 14:45:00",
+            "subject" => "Pelajaran 14:45",
             "start" => "14:45:00",
             "end" => "15:00:00"
         ]);
@@ -315,6 +315,33 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\SubjectLesson::create([
             "subject_name" => "Religion"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Library"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Music"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Mandarin"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "English"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Science"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Art and Craft"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "PE"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Computer"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Matematika"
         ]);
 
         // last work masukkan semua break dan lunch time agar waktu yg available kelihatan

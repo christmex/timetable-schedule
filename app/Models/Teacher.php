@@ -19,6 +19,10 @@ class Teacher extends Model
         return $this->hasMany(Schedule::class);
     }
 
+    // public function SumJP(){
+    //     return $this->Schedules()->count();
+    // }
+
     public function classrooms()
     {
         return $this->belongsToMany(Classroom::class,'classroom_teacher','teacher_id','classroom_id')

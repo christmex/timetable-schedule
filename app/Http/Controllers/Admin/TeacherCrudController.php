@@ -40,6 +40,26 @@ class TeacherCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('teacher_name');
+        CRUD::addColumn([
+            'name' => 'schedules',
+            'type' => 'relationship_count',
+            'label' => 'Teacher Sum Schedule',
+            'suffix' => ' JP',
+            'orderable'  => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->withCount('schedules')->orderBy('schedules_count', $columnDirection);
+            },
+        ]);
+        // CRUD::addColumn([
+        //     'name' => 'teacher_sumJP',
+        //     'label' => 'Teacher Sum JP',
+        //     'type' => 'model_function',
+        //     'function_name' => 'SumJP',
+        //     'orderable'  => true,
+        //     'orderLogic' => function ($query, $column, $columnDirection) {
+        //         return $query->withCount('schedules')->orderBy('schedules_count', $columnDirection);
+        //     }
+        // ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

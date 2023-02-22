@@ -192,37 +192,63 @@ class ScheduleCrudController extends CrudController
         // $this->setupCreateOperation();
         CRUD::setValidation(UpdateScheduleRequest::class);
 
+
         CRUD::addField([
             'type' => 'select',
-            'name' => 'school_year_id', // the relationship name in your Migration
+            'label' => 'School Year',
+            'name' => 'school_year_id_disabled', // the relationship name in your Migration
             'entity' => 'Schoolyear', // the relationship name in your Model
             'attribute' => 'school_year_name',
             'attributes' => [
-                'readonly' => 'readonly'
+                'disabled' => 'disabled'
             ]
         ]);
 
         CRUD::addField([
+            'type' => 'hidden',
+            'name' => 'school_year_id', // the relationship name in your Migration
+            'entity' => 'Schoolyear', // the relationship name in your Model
+            'attribute' => 'school_year_name',
+        ]);
+
+        CRUD::addField([
             'type' => 'select',
-            'name' => 'classroom_id', // the relationship name in your Migration
+            'label' => 'Classroom',
+            'name' => 'classroom_id_disabled', // the relationship name in your Migration
             'entity' => 'Classroom', // the relationship name in your Model
             'attribute' => 'classname',
             'attributes' => [
-                'readonly' => 'readonly'
+                'disabled' => 'disabled'
             ]
         ]);
 
         CRUD::addField([
+            'type' => 'hidden',
+            'name' => 'classroom_id', // the relationship name in your Migration
+            'entity' => 'Classroom', // the relationship name in your Model
+            'attribute' => 'classname',
+        ]);
+
+        CRUD::addField([
             'type' => 'select',
-            'name' => 'timetable_id', // the relationship name in your Migration
+            'label' => 'Timetable',
+            'name' => 'timetable_id_disabled', // the relationship name in your Migration
             'entity' => 'Timetable', // the relationship name in your Model
             'attribute' => 'subject',
             'attributes' => [
-                'readonly' => 'readonly'
+                'disabled' => 'disabled'
             ]
         ]);
 
+        CRUD::addField([
+            'type' => 'hidden',
+            'name' => 'timetable_id', // the relationship name in your Migration
+            'entity' => 'Timetable', // the relationship name in your Model
+            'attribute' => 'subject',
+        ]);
+
         CRUD::field('teacher_id');
+
         CRUD::addField([
             'type' => 'select',
             'name' => 'subject_lesson_id', // the relationship name in your Migration
@@ -232,12 +258,20 @@ class ScheduleCrudController extends CrudController
 
         CRUD::addField([
             'type' => 'select',
-            'name' => 'day_id', // the relationship name in your Migration
+            'label' => 'Day',
+            'name' => 'day_id_disabled', // the relationship name in your Migration
             'entity' => 'Day', // the relationship name in your Model
             'attribute' => 'day_name',
             'attributes' => [
-                'readonly' => 'readonly'
+                'disabled' => 'disabled'
             ]
+        ]);
+
+        CRUD::addField([
+            'type' => 'hidden',
+            'name' => 'day_id', // the relationship name in your Migration
+            'entity' => 'Day', // the relationship name in your Model
+            'attribute' => 'day_name',
         ]);
 
         CRUD::field('no_lesson');
@@ -271,6 +305,8 @@ class ScheduleCrudController extends CrudController
 
             // register any Model Events defined on fields
             $this->crud->registerFieldEvents();
+
+            // dd($this->crud->getRequest()->request->get('subject_lesson_id'));
             
             if($this->crud->getRequest()->request->get('subject_lesson_id') != 0){
 
@@ -278,14 +314,18 @@ class ScheduleCrudController extends CrudController
                 $checkSubjectLesson = Schedule::with('Classroom','SchoolYear','Teacher','SubjectLesson')
                 ->where('school_year_id',$this->crud->getRequest()->request->get('school_year_id'))
                 ->where('classroom_id',$this->crud->getRequest()->request->get('classroom_id'))
+
                 ->where('subject_lesson_id',$this->crud->getRequest()->request->get('subject_lesson_id'))
                 ->orWhere('subject_lesson_id',0)
                 ->first();
-
-                if(!(($this->crud->getRequest()->request->get('subject_lesson_id') == $checkSubjectLesson->SubjectLesson->id) && ($this->crud->getRequest()->request->get('teacher_id') == $checkSubjectLesson->teacher->id))){
-                    \Alert::error("Pelajaran ".$checkSubjectLesson->SubjectLesson->subject_name." di kelas ".$checkSubjectLesson->Classroom->classname." tahun ajaran ".$checkSubjectLesson->SchoolYear->school_year_name." sudah di ajar oleh ".$checkSubjectLesson->teacher->teacher_name)->flash();
-                    return redirect()->back()->withInput();
+                
+                if($checkSubjectLesson){
+                    if(!(($this->crud->getRequest()->request->get('subject_lesson_id') == ($checkSubjectLesson->SubjectLesson->id)) && ($this->crud->getRequest()->request->get('teacher_id') == $checkSubjectLesson->teacher->id))){
+                        \Alert::error("Pelajaran ".$checkSubjectLesson->SubjectLesson->subject_name." di kelas ".$checkSubjectLesson->Classroom->classname." tahun ajaran ".$checkSubjectLesson->SchoolYear->school_year_name." sudah di ajar oleh ".$checkSubjectLesson->teacher->teacher_name)->flash();
+                        return redirect()->back()->withInput();
+                    }
                 }
+
     
                 // if($checkSubjectLesson){
                 //     \Alert::error("Pelajaran ".$checkSubjectLesson->SubjectLesson->subject_name." di kelas ".$checkSubjectLesson->Classroom->classname." tahun ajaran ".$checkSubjectLesson->SchoolYear->school_year_name." sudah di ajar oleh ".$checkSubjectLesson->teacher->teacher_name)->flash();
