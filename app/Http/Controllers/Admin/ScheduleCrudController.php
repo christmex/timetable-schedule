@@ -326,6 +326,24 @@ class ScheduleCrudController extends CrudController
                     }
                 }
 
+                // Get all timetable  based on teacher, day 
+                $get_teacher_timetable_based_on_day = Schedule::with('Timetable','Teacher','Classroom')
+                ->where('school_year_id', $this->crud->getCurrentEntry()->school_year_id)
+                ->where('day_id', $this->crud->getCurrentEntry()->day_id)
+                ->where('timetable_id', $this->crud->getCurrentEntry()->timetable_id)
+                ->where('teacher_id', $this->crud->getRequest()->request->get('teacher_id'))
+                ->whereNot('id', $this->crud->getCurrentEntry()->id)
+                ->first();
+
+                // dd(!empty($get_teacher_timetable_based_on_day));
+
+                // $teacher_all_timetable = array_unique($get_teacher_timetable_based_on_day->pluck('timetable_id')->toArray());
+
+                if(!empty($get_teacher_timetable_based_on_day)){
+                    \Alert::error("Di jam ".$this->crud->getCurrentEntry()->Timetable->subject." ".$get_teacher_timetable_based_on_day->Teacher->teacher_name." sudah mengajar di kelas ".$get_teacher_timetable_based_on_day->Classroom->classname)->flash();
+                    return redirect()->back()->withInput();
+                }
+
     
                 // if($checkSubjectLesson){
                 //     \Alert::error("Pelajaran ".$checkSubjectLesson->SubjectLesson->subject_name." di kelas ".$checkSubjectLesson->Classroom->classname." tahun ajaran ".$checkSubjectLesson->SchoolYear->school_year_name." sudah di ajar oleh ".$checkSubjectLesson->teacher->teacher_name)->flash();

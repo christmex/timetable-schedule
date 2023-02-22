@@ -2,4 +2,5 @@
 
 @section('content')
     <livewire:widgets.card/>
+    <livewire:widgets.bulk-delete-schedules/>
 @endsection

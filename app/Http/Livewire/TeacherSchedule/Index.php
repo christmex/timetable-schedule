@@ -184,13 +184,13 @@ class Index extends Component
                                         return false;
                                     }
                                     
-                                    // if($j == 0){
-                                    //     print_r($timetable_for_check);
-                                    //     // dd($timetable_for_check);
-                                    //     dd($select_class);
-                                    // }
                                     if($calculate_missing_jp){
 
+                                        // Cek apakah count select class lebih besar atau kurang dari total_jp_bagi_kelas_dibagi_hari
+                                        if(!(count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1) >= 0)){
+                                            $this->send_alert('warning','ERROR, This is line ' . __LINE__ . ' in file ' . __FILE__);
+                                            return false;
+                                        }
                                         // Ambil secara random index berapa
                                         $random = rand(0, count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1));
                                         // dd(count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1));
@@ -199,6 +199,12 @@ class Index extends Component
 
                                         $calculate_missing_jp = $calculate_missing_jp - 1;
                                     }else {
+                                        // Cek apakah count select class lebih besar atau kurang dari total_jp_bagi_kelas_dibagi_hari
+                                        if(!(count($select_class) - $total_jp_bagi_kelas_dibagi_hari >= 0)){
+                                            $this->send_alert('warning','ERROR, This is line ' . __LINE__ . ' in file ' . __FILE__);
+                                            return false;
+                                        }
+
                                         // Ambil secara random index berapa
                                         $random = rand(0, count($select_class) - $total_jp_bagi_kelas_dibagi_hari);
                                         
@@ -250,7 +256,7 @@ class Index extends Component
 
                             // Send alert to script and reset All error
                             if($update_data){
-                                $this->send_alert('success',"Success adding new teacher schedule");
+                                $this->send_alert('success',"Success adding new teacher schedule, total row yang berhasil ditambahkan = ".$update_data);
                                 $this->resetAll();
                             }else {
                                 $this->send_alert('error',"Failed adding new teacher schedule");

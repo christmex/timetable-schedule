@@ -73,7 +73,7 @@ class Card extends Component
 
 
 
-        return view('livewire.widgets.card',compact('Teachers','Classrooms','SubjectLesson','SchoolYears','Classrooms','Days','Timetables'));
+        return view('livewire.widgets.card',compact('Teachers','SubjectLesson','SchoolYears','Classrooms','Days','Timetables'));
     }
 
     public function find(){
