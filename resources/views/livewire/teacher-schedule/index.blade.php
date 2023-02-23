@@ -19,6 +19,34 @@
                             @error('form_school_year_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
 
                             <div class="mt-3">
+                                <label for="teachers"><b>Teachers </b></label>
+                                <select wire:model=form_teacher_id class="form-control select inline @error('form_teacher_id')is-invalid @enderror" id="teachers">
+                                    <option value="" selected>-- Choosen one --</option>
+                                    @foreach($Teachers as $teacher)
+                                        <option value="{{$teacher->id}}">{{$teacher->teacher_name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('form_teacher_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div class="mt-3">
+                                <label for="subject_lessons"><b>Subject Lessons</b></label>
+                                <select wire:model=form_subject_lesson_id class="form-control select inline @error('form_subject_lesson_id')is-invalid @enderror" id="subject_lessons">
+                                    <option selected>-- Choosen one --</option>
+                                    @foreach($SubjectLessons as $subject_lesson)
+                                        <option value="{{$subject_lesson->id}}">{{$subject_lesson->subject_name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('form_subject_lesson_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div class="mt-3">
+                                <label for="teaching_amount"><b>Teaching Lessons</b></label>
+                                <input type="number" class="form-control inline @error('form_teaching_amount')is-invalid @enderror" min="1" wire:model="form_teaching_amount" id="teaching_amount" placeholder="Ex: 8">
+                                @error('form_teaching_amount') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
+                            
+                            <div class="mt-3">
                                 <label for="days"><b>Days</b></label>
                                 <div class="checkbox">
                                     @foreach($Days as $day)
@@ -54,35 +82,6 @@
                                 </div>
                                 @error('form_classroom_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div>
-
-                            <div class="mt-3">
-                                <label for="teachers"><b>Teachers </b></label>
-                                <select wire:model=form_teacher_id class="form-control select inline @error('form_teacher_id')is-invalid @enderror" id="teachers">
-                                    <option value="" selected>-- Choosen one --</option>
-                                    @foreach($Teachers as $teacher)
-                                        <option value="{{$teacher->id}}">{{$teacher->teacher_name}}</option>
-                                    @endforeach
-                                </select>
-                                @error('form_teacher_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="mt-3">
-                                <label for="subject_lessons"><b>Subject Lessons</b></label>
-                                <select wire:model=form_subject_lesson_id class="form-control select inline @error('form_subject_lesson_id')is-invalid @enderror" id="subject_lessons">
-                                    <option selected>-- Choosen one --</option>
-                                    @foreach($SubjectLessons as $subject_lesson)
-                                        <option value="{{$subject_lesson->id}}">{{$subject_lesson->subject_name}}</option>
-                                    @endforeach
-                                </select>
-                                @error('form_subject_lesson_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="mt-3">
-                                <label for="teaching_amount"><b>Teaching Lessons</b></label>
-                                <input type="number" class="form-control inline @error('form_teaching_amount')is-invalid @enderror" min="1" wire:model="form_teaching_amount" id="teaching_amount" placeholder="Ex: 8">
-                                @error('form_teaching_amount') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                            </div>
-
 
                         </div>
                     </div>
