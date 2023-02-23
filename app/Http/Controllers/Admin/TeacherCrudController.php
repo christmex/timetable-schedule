@@ -97,4 +97,25 @@ class TeacherCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
+    // show whatever you want
+    protected function setupShowOperation()
+    {
+        // MAYBE: do stuff before the autosetup
+
+        // automatically add the columns
+        $this->setupListOperation();
+        // $this->autoSetupShowOperation();
+
+        // MAYBE: do stuff after the autosetup
+
+        CRUD::addColumn([
+            'name'  => 'detail_schedule',
+            'label' => 'Detail Schedule', // Table column heading
+            'type'  => 'model_function',
+            'limit'  => 1000,
+            'function_name' => 'getDetailSchedule',
+        ]);
+    }
+
 }
