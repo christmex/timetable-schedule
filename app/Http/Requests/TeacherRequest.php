@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TeacherRequest extends FormRequest
@@ -26,6 +27,10 @@ class TeacherRequest extends FormRequest
     {
         return [
             // 'name' => 'required|min:5|max:255'
+            'teacher_name' => [
+                'required',
+                Rule::unique('teachers')->ignore(request()->id),
+            ],
         ];
     }
 
