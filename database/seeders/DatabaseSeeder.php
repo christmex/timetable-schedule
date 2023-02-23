@@ -185,9 +185,9 @@ class DatabaseSeeder extends Seeder
         \App\Models\Teacher::create([
             "teacher_name" => "Mrs. Yanny Debora P.",
         ]);
-        \App\Models\Teacher::create([
-            "teacher_name" => "Mr. Beny",
-        ]);
+        // \App\Models\Teacher::create([
+        //     "teacher_name" => "Mr. Beny",
+        // ]);
         \App\Models\Teacher::create([
             "teacher_name" => "Mrs. Rinte Gultom",
         ]);
@@ -217,6 +217,12 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Teacher::create([
             "teacher_name" => "Mr. Mardi"
+        ]);
+        \App\Models\Teacher::create([
+            "teacher_name" => "Tc. Liyanti"
+        ]);
+        \App\Models\Teacher::create([
+            "teacher_name" => "All Teacher"
         ]);
 
 
@@ -322,7 +328,7 @@ class DatabaseSeeder extends Seeder
             "end" => "13:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 13:45",
+            "subject" => "Homeroom 13:45",
             "start" => "13:45:00",
             "end" => "14:20:00",
         ]);
@@ -337,9 +343,14 @@ class DatabaseSeeder extends Seeder
             "end" => "14:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 14:45",
+            "subject" => "Homeroom 14:45",
             "start" => "14:45:00",
             "end" => "15:00:00"
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Homeroom 14:55",
+            "start" => "14:55:00",
+            "end" => "15:10:00"
         ]);
 
         \App\Models\SubjectLesson::create([
@@ -377,6 +388,12 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\SubjectLesson::create([
             "subject_name" => "Matematika"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "CH.Building"
+        ]);
+        \App\Models\SubjectLesson::create([
+            "subject_name" => "Worship"
         ]);
 
         // last work masukkan semua break dan lunch time agar waktu yg available kelihatan
