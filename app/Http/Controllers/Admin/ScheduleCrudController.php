@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Alert;
 use Carbon\Carbon;
+use App\Models\Day;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -149,14 +150,18 @@ class ScheduleCrudController extends CrudController
                 return $result;
             },
         ]);
-        CRUD::addField([
-            'type'      => 'checklist',
-            'name'      => 'day_id',
-            'entity'    => 'Day',
-            'attribute' => 'day_name',
-            'model'     => "App\Models\Day",
-            // 'pivot'     => true,
-        ]);
+
+        CRUD::field('all_day')->label('Days')->type('text')->attributes(['disabled' => "disabled"])->value('Schedule for all day, take a look at Days Menu to see the day');
+        // CRUD::field('no_lesson');
+        // Kloinidiaktifkanaktifkanjuga schedulerequestnya
+        // CRUD::addField([
+        //     'type'      => 'checklist',
+        //     'name'      => 'day_id',
+        //     'entity'    => 'Day',
+        //     'attribute' => 'day_name',
+        //     'model'     => "App\Models\Day",
+        //     // 'pivot'     => true,
+        // ]);
         
         // CRUD::field('teacher_id');
         // CRUD::addField([
@@ -400,11 +405,13 @@ class ScheduleCrudController extends CrudController
 
             $getClassroom = json_decode($this->crud->getRequest()->request->get('classroom_id'), true);
             $getTimetable = json_decode($this->crud->getRequest()->request->get('timetable_id'), true);
-            $getDay = json_decode($this->crud->getRequest()->request->get('day_id'), true);
+            // $getDay = json_decode($this->crud->getRequest()->request->get('day_id'), true);// this if in from you use select day if not then comment this
+            $getDay = Day::select('id')->pluck('id')->toArray();
             $getNoLesson = json_decode($this->crud->getRequest()->request->get('no_lesson'), true);
 
             $getAllDataForCheck = $this->crud->model->all();
             // dd($getDay);
+            // dd();
             $query = [];
             for ($i=0; $i < count($getClassroom); $i++) {
                 for ($k=0; $k < count($getDay); $k++) { 

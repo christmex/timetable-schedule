@@ -42,13 +42,13 @@ class ScheduleRequest extends FormRequest
                         }
                     },
                 ],
-            'day_id' => ['required', function ($attribute, $value, $fail) {
-                        $value = json_decode($value,true);
-                        if (! is_array($value) || count($value) == 0) {
-                            $fail('The '.$attribute.' is invalid, please choose one');
-                        }
-                    },
-                ],
+            // 'day_id' => ['required', function ($attribute, $value, $fail) {
+            //             $value = json_decode($value,true);
+            //             if (! is_array($value) || count($value) == 0) {
+            //                 $fail('The '.$attribute.' is invalid, please choose one');
+            //             }
+            //         },
+            //     ],
             'no_lesson' => ['required', function ($attribute, $value, $fail) {
                         $value = json_decode($value,true);
                         if (! is_array($value)) {
