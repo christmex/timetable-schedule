@@ -237,18 +237,18 @@ class DatabaseSeeder extends Seeder
             "end" => "09:10:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Break KK 09:10",
-            "start" => "09:10:00",
-            "end" => "09:25:00",
-        ]);
-        \App\Models\Timetable::create([
             "subject" => "Pelajaran 09:10",
             "start" => "09:10:00",
             "end" => "09:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 09:45",
-            "start" => "09:45:00",
+            "subject" => "Break KK 09:10",
+            "start" => "09:10:00",
+            "end" => "09:25:00",
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Pelajaran 09:25",
+            "start" => "09:25:00",
             "end" => "10:00:00",
         ]);
         \App\Models\Timetable::create([
@@ -262,9 +262,19 @@ class DatabaseSeeder extends Seeder
             "end" => "10:35:00",
         ]);
         \App\Models\Timetable::create([
+            "subject" => "Break KK2 10:35",
+            "start" => "10:35:00",
+            "end" => "10:50:00",
+        ]);
+        \App\Models\Timetable::create([
             "subject" => "Pelajaran 10:35",
             "start" => "10:35:00",
             "end" => "11:10:00",
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Pelajaran 10:50",
+            "start" => "10:50:00",
+            "end" => "11:25:00",
         ]);
         \App\Models\Timetable::create([
             "subject" => "Pelajaran 11:10",
@@ -272,8 +282,18 @@ class DatabaseSeeder extends Seeder
             "end" => "11:45:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 11:45",
+            "subject" => "Pelajaran 11:25",
+            "start" => "11:25:00",
+            "end" => "12:00:00",
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Lunch 11:45",
             "start" => "11:45:00",
+            "end" => "12:20:00",
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Lunch 12:00",
+            "start" => "12:00:00",
             "end" => "12:20:00",
         ]);
         \App\Models\Timetable::create([
@@ -282,12 +302,22 @@ class DatabaseSeeder extends Seeder
             "end" => "12:55:00",
         ]);
         \App\Models\Timetable::create([
+            "subject" => "Pelajaran 12:35",
+            "start" => "12:35:00",
+            "end" => "13:10:00",
+        ]);
+        \App\Models\Timetable::create([
             "subject" => "Pelajaran 12:55",
             "start" => "12:55:00",
             "end" => "13:30:00",
         ]);
         \App\Models\Timetable::create([
-            "subject" => "Pelajaran 13:30",
+            "subject" => "Pelajaran 13:10",
+            "start" => "13:10:00",
+            "end" => "13:45:00",
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Break Kb2 13:30",
             "start" => "13:30:00",
             "end" => "13:45:00",
         ]);
@@ -298,6 +328,11 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Timetable::create([
             "subject" => "Pelajaran 14:20",
+            "start" => "14:20:00",
+            "end" => "14:55:00",
+        ]);
+        \App\Models\Timetable::create([
+            "subject" => "Evaluation 14:20",
             "start" => "14:20:00",
             "end" => "14:45:00",
         ]);
