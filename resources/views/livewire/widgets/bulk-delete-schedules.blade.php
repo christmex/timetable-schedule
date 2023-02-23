@@ -6,7 +6,7 @@
                 <div class="card-body">
                 <div class="row">
 
-                    <div class="form-group col-sm-4">
+                    <div class="form-group col-sm-12">
                         <label for="school_years"><b>School Year</b></label>
                         <select wire:model=form_school_year_id class="form-control select inline @error('form_school_year_id')is-invalid @enderror" id="school_years">
                             <option value="" selected>-- Choosen one --</option>
@@ -17,7 +17,7 @@
                         @error('form_school_year_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="form-group col-sm-8">
+                    <!-- <div class="form-group col-sm-8">
                         <label for="days"><b>Days</b></label>
                         <div class="checkbox">
                             @foreach($Days as $day)
@@ -28,7 +28,7 @@
                             @endforeach
                         </div>
                         @error('form_day_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                    </div>
+                    </div> -->
 
                     <div class="form-group col-sm-12">
                         <label for="timetables"><b>Timetables</b></label>
@@ -48,7 +48,7 @@
 
 
                     <div class="form-group col-sm-12">
-                        <label for="classrooms"><b>Classrooms {{print_r($form_classroom_id)}}</b></label>
+                        <label for="classrooms"><b>Classrooms</b></label>
                         <div class="row">
                             @foreach($Classrooms as $classroom)
                             <div class="col-sm-{{ intval(12/3) }}">

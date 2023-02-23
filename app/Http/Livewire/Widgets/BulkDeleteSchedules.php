@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Widgets;
 
 use App\Models\Day;
 use Livewire\Component;
+use App\Models\Schedule;
 use App\Models\Classroom;
 use App\Models\Timetable;
 use App\Models\SchoolYear;
@@ -17,7 +18,7 @@ class BulkDeleteSchedules extends Component
 
     protected $rules = [
         'form_school_year_id' => 'required',
-        'form_day_id' => 'required|array',
+        // 'form_day_id' => 'required|array',
         'form_classroom_id' => 'required|array',
         'form_timetable_id' => 'required|array',
     ];
@@ -29,6 +30,10 @@ class BulkDeleteSchedules extends Component
         $this->form_day_id = [];
         $this->form_classroom_id = [];
         $this->form_timetable_id = [];
+    }
+
+    public function send_alert($type,$text){
+        $this->dispatchBrowserEvent('alert_dispatch', ['text' => $text,"type" => $type]);
     }
 
     public function render()
@@ -43,9 +48,25 @@ class BulkDeleteSchedules extends Component
 
     public function delete(){
         $validate = $this->validate();
-
+        // dd($validate);
         if($validate) {
             
+            $doAction = Schedule::where('school_year_id',$this->form_school_year_id)
+            // ->whereIn('day_id', $this->form_day_id)
+            ->whereIn('timetable_id', $this->form_timetable_id)
+            ->whereIn('classroom_id', $this->form_classroom_id)
+            ->delete();
+
+            // dd($this->form_timetable_id);
+
+            // Send alert to script and reset All error
+            if($doAction){
+                $this->send_alert('success',"Success deleted schedule, total affected row = ".$doAction);
+                $this->resetAll();
+            }else {
+                $this->send_alert('error',"Failed deleted schedule");
+                return false;
+            }
         }
     }
 }

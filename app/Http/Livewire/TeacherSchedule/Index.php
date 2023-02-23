@@ -86,7 +86,7 @@ class Index extends Component
             ->where('teacher_id',$this->form_teacher_id)
             ->whereIn('day_id',$this->form_day_id)->get();
             if($check_teacher_and_subject_lesson->count()){
-                $this->send_alert('warning',"jadwal sudah ada silahkan masukkan manual di menu schedule, fitur untuk melengkapi sisa jam pelajaran yang belum terisi atau kurang berdasarkan jam pelajaran guru secara otomatis belum tersedia, ini juga untuk menghindari duplikasi data");
+                $this->send_alert('error',"jadwal sudah ada silahkan masukkan manual di menu schedule, fitur untuk melengkapi sisa jam pelajaran yang belum terisi atau kurang berdasarkan jam pelajaran guru secara otomatis belum tersedia, ini juga untuk menghindari duplikasi data");
                 return false;
             }
 
@@ -110,12 +110,12 @@ class Index extends Component
             // dd($query_to_select);
             // Cek apakah jumlah jam pelajaran yang kosong tersedia dan tidak kurang dari jam mengajar guru 
             if($this->form_teaching_amount > $query_to_select->count()){
-                $this->send_alert('warning',"jam pelajaran yang tersedia kurang dari waktu jam mengajar guru di hari yang telah dipilih, silahkan cek secara manual jumlah jam kosong di hari yang dipilih untuk memastikan");
+                $this->send_alert('error',"jam pelajaran yang tersedia kurang dari waktu jam mengajar guru di hari yang telah dipilih, silahkan cek secara manual jumlah jam kosong di hari yang dipilih untuk memastikan");
                 return false;
             }else {
                 // Cek apakah kelas yang di ajar lebih banyak dibanding jumlah jam mengajar
                 if(count($this->form_classroom_id) > $this->form_teaching_amount){
-                    $this->send_alert('warning',"jam mengajar lebih sedikit dari kelas yang akan di ajar");
+                    $this->send_alert('error',"jam mengajar lebih sedikit dari kelas yang akan di ajar");
                     return false;
                 }else {
                     // Bagi total jam mengajar dengan banyaknya kelas yang akan di ajar
@@ -125,12 +125,12 @@ class Index extends Component
 
                     // Cek apakah jam pelajaran tiap kelas tidak kurang dari hari" yang dipilih, semisal satu kelas hanya mendapatkan 4 jam pelajaran dan user memilih 5 hari maka ini tidak bisa dilanjutkan.
                     if(count($this->form_day_id) > $jp_bagi_kelas){
-                        $this->send_alert('warning',"hari yang dipilih terlalu banyak dari pada hasil pembagian jam pelajaran dalam tiap kelas yang di ajar");
+                        $this->send_alert('error',"hari yang dipilih terlalu banyak dari pada hasil pembagian jam pelajaran dalam tiap kelas yang di ajar");
                         return false;
                     }else {
                         if($cek_selisih){
                             // Lakukan penamnahan selisih yang ada, dari hasil pemeriksaan di jadal mengajar sepertinya semuanya harus sama jadi tidak ada selisih jam mengajar, semisal ngajar di mathew 1 dan 2, tidak ada case yang menampilkan guru a mengajar di mathew 1 5 jam pelajaran sedangkan di mathew 2 hanya 4 jam
-                            $this->send_alert('warning',"Silahkan cek kembali, jam mengajar tidak balance dengan jumlah kelas yang di ajar");
+                            $this->send_alert('error',"Silahkan cek kembali, jam mengajar tidak balance dengan jumlah kelas yang di ajar");
                             return false;
                         }else {
                             // Membagi jam mengajar tiap kelas dengan hari yang dipilih
@@ -158,7 +158,7 @@ class Index extends Component
                             // For checking, apa jam pelajaran di hari yang telah dipilih cukup untuk tiap jp semisal di hari senin dan selasa tersisa 2 slot jp yg kosong, namun kelas punya 3 jp otomatis tidak bsa
                             for ($i=0; $i < count($this->form_classroom_id); $i++) { 
                                 if(!($query_to_select->where('classroom_id',$this->form_classroom_id[$i])->count() >= $jp_bagi_kelas)){
-                                    $this->send_alert('warning',"Slot jam pelajaran yang tersedia di hari yang terpilih, tidak cukup");
+                                    $this->send_alert('error',"Slot jam pelajaran yang tersedia di hari yang terpilih, tidak cukup");
                                     return false;
                                 }
                             }
@@ -180,7 +180,7 @@ class Index extends Component
                                     $select_class = $select_class->sortBy('Timetable.start');
                                     
                                     if(!count($select_class)){
-                                        $this->send_alert('warning',"Jam pelajaran yang tersedia tabrakan, guru sudah mengajar di beberapa kelas di jam yang sama, silahkan cek slot untuk melihat detail");
+                                        $this->send_alert('error',"Jam pelajaran yang tersedia tabrakan, guru sudah mengajar di beberapa kelas di jam yang sama, silahkan cek slot untuk melihat detail");
                                         return false;
                                     }
                                     
@@ -188,7 +188,7 @@ class Index extends Component
 
                                         // Cek apakah count select class lebih besar atau kurang dari total_jp_bagi_kelas_dibagi_hari
                                         if(!(count($select_class) - ($total_jp_bagi_kelas_dibagi_hari + 1) >= 0)){
-                                            $this->send_alert('warning','ERROR, This is line ' . __LINE__ . ' in file ' . __FILE__);
+                                            $this->send_alert('error','ERROR, This is line ' . __LINE__ . ' in file ' . __FILE__);
                                             return false;
                                         }
                                         // Ambil secara random index berapa
@@ -201,7 +201,7 @@ class Index extends Component
                                     }else {
                                         // Cek apakah count select class lebih besar atau kurang dari total_jp_bagi_kelas_dibagi_hari
                                         if(!(count($select_class) - $total_jp_bagi_kelas_dibagi_hari >= 0)){
-                                            $this->send_alert('warning','ERROR, This is line ' . __LINE__ . ' in file ' . __FILE__);
+                                            $this->send_alert('error','ERROR, This is line ' . __LINE__ . ' in file ' . __FILE__);
                                             return false;
                                         }
 
