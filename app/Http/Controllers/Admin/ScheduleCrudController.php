@@ -69,7 +69,19 @@ class ScheduleCrudController extends CrudController
             "entity" => "Timetable",
             "model" => "App\Models\Timetable",
             "type" => "select",
-            "attribute" => "subject"
+            "attribute" => "subject",
+            'wrapper' => [
+                'element' => 'span',
+                // 'class' => 'badge badge-danger'
+                'class' => function ($crud, $column, $entry, $related_key) {
+                    
+                if ($entry->no_lesson == true) {
+                    return 'badge badge-danger';
+                }
+    
+                // return 'badge badge-info';
+            }
+            ],
         ]);
         
         CRUD::column('teacher_id');
