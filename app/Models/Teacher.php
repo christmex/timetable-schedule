@@ -14,6 +14,16 @@ class Teacher extends Model
         'teacher_name'
     ];
 
+    public function setTeacherNameAttribute($value)
+    {
+        // $this->attributes['teacher_name'] = 'Tc.' . ucwords(str_replace('Tc.', '', $value));
+        $this->attributes['teacher_name'] = ucwords($value);
+    }
+    // public function getTeacherNameAttribute($value)
+    // {
+    //     return ucwords(str_replace('Tc.', '', $value));
+    // }
+
     public function Schedules()
     {
         return $this->hasMany(Schedule::class);

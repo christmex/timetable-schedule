@@ -78,7 +78,8 @@ class TeacherCrudController extends CrudController
     {
         CRUD::setValidation(TeacherRequest::class);
 
-        CRUD::field('teacher_name');
+        // CRUD::field('teacher_name')->prefix('Tc.')->attributes(['placeholder' => 'Ex: Yanthi']);
+        CRUD::field('teacher_name')->attributes(['placeholder' => 'Ex: Tc. Yanthi']);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

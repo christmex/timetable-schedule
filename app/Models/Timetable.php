@@ -16,4 +16,9 @@ class Timetable extends Model
         'end',
         'description'
     ];
+
+    public function setSubjectAttribute($value)
+    {
+        $this->attributes['subject'] = ucwords($value);
+    }
 }

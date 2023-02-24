@@ -14,4 +14,9 @@ class SchoolYear extends Model
         'school_year_name',
         'is_active',
     ];
+
+    public function setSchoolYearNameAttribute($value)
+    {
+        $this->attributes['school_year_name'] = ucwords($value);
+    }
 }

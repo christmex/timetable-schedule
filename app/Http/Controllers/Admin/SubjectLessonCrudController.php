@@ -58,7 +58,8 @@ class SubjectLessonCrudController extends CrudController
     {
         CRUD::setValidation(SubjectLessonRequest::class);
 
-        CRUD::field('subject_name');
+        // CRUD::field('subject_name');
+        CRUD::field('subject_name')->attributes(['placeholder' => 'Ex: Maths']);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

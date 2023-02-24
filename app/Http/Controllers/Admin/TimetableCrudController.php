@@ -61,7 +61,8 @@ class TimetableCrudController extends CrudController
     {
         CRUD::setValidation(TimetableRequest::class);
 
-        CRUD::field('subject');
+        // CRUD::field('subject');
+        CRUD::field('subject')->attributes(['placeholder' => 'Ex: Homeroom 08:00']);
         CRUD::field('start')->hint('*AM 00:00-11:59, PM 12:00-23:59');
         CRUD::field('end')->hint('*AM 00:00-11:59, PM 12:00-23:59');
         CRUD::field('description');

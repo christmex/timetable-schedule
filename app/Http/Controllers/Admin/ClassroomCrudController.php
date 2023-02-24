@@ -58,7 +58,8 @@ class ClassroomCrudController extends CrudController
     {
         CRUD::setValidation(ClassroomRequest::class);
 
-        CRUD::field('classname');
+        // CRUD::field('classname');
+        CRUD::field('classname')->attributes(['placeholder' => 'Ex: Matthew 1']);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

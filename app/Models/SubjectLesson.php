@@ -13,4 +13,9 @@ class SubjectLesson extends Model
     protected $fillable = [
         'subject_name'
     ];
+
+    public function setSubjectNameAttribute($value)
+    {
+        $this->attributes['subject_name'] = ucwords($value);
+    }
 }

@@ -14,6 +14,11 @@ class Classroom extends Model
         'classname'
     ];
 
+    public function setClassnameAttribute($value)
+    {
+        $this->attributes['classname'] = ucwords($value);
+    }
+
     public function Schedules()
     {
         return $this->hasMany(Schedule::class)->where('no_lesson',0)
