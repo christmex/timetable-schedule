@@ -130,7 +130,7 @@
 
     <!-- Find idle teacher -->
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header"><strong>Find idle teacher </strong></div>
                 <div class="card-body">
